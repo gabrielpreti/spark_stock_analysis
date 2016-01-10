@@ -1,11 +1,13 @@
 package preti.spark.stock.system;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -25,6 +27,7 @@ public class TradeSystem implements Serializable {
 	private double accountInitialPosition;
 	private double accountBalance;
 	private Map<Date, Double> balanceHistory;
+
 	private Map<String, TradingStrategy> tradingStrategies;
 
 	public TradeSystem(Stock stock, double accountInitialPosition, TradingStrategy strategy) {
@@ -49,6 +52,22 @@ public class TradeSystem implements Serializable {
 
 		balanceHistory = new TreeMap<>();
 		this.tradingStrategies = tradingStrategies;
+	}
+
+	public Map<Date, Double> getBalanceHistory() {
+		return balanceHistory;
+	}
+
+	public Collection<StockTrade> getWallet() {
+		return wallet;
+	}
+
+	public List<Stock> getStocks() {
+		List<Stock> stocks = new ArrayList<>();
+		for (StockTrade st : wallet) {
+			stocks.add(st.getStock());
+		}
+		return stocks;
 	}
 
 	public void setTradingStrategies(Map<String, TradingStrategy> strategies) {

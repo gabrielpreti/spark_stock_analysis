@@ -20,6 +20,10 @@ public class StockTrade implements Serializable {
 		return stock;
 	}
 	
+	public List<Trade> getTrades() {
+		return trades;
+	}
+	
 	public Trade getLastTrade() {
 		if (trades.size() == 0)
 			return null;

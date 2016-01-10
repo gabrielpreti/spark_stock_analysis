@@ -21,6 +21,9 @@ import org.joda.time.DateTime;
 
 import preti.spark.stock.model.Stock;
 import preti.spark.stock.model.StockHistory;
+import preti.spark.stock.reporting.BalanceReport;
+import preti.spark.stock.reporting.StockReport;
+import preti.spark.stock.reporting.TradeReport;
 import preti.spark.stock.system.TradeSystem;
 import preti.spark.stock.system.TradingStrategy;
 import preti.spark.stock.system.TradingStrategyImpl;
@@ -73,11 +76,11 @@ public class StockAnalysis {
 		Date initialDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
 		Date finalDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
 		TradeSystem system = new TradeSystem(stocks, accountInitialPosition, null);
-		
+
 		DateTime currentInitialDate = new DateTime(initialDate.getTime()).plusMonths(1);
 		DateTime currentFinalDate = currentInitialDate.plusMonths(1);
 		Map<String, TradingStrategy> optimzedStrategies = new HashMap<>();
-		while (currentFinalDate.isBefore(finalDate.getTime() + 1)) {			
+		while (currentFinalDate.isBefore(finalDate.getTime() + 1)) {
 			Map<String, TradingStrategy> newStrategies = new HashMap<>();
 			for (Stock s : stocks) {
 				TradingStrategy strategy = optimizeParameters(s, accountInitialPosition,
@@ -86,7 +89,8 @@ public class StockAnalysis {
 					newStrategies.put(s.getCode(), strategy);
 				}
 			}
-			log.info("Analyzing from " + currentInitialDate + " to " + currentFinalDate + " with training data from " + currentInitialDate.minusMonths(1) + " to " + currentInitialDate.minusDays(1));
+			log.info("Analyzing from " + currentInitialDate + " to " + currentFinalDate + " with training data from "
+					+ currentInitialDate.minusMonths(1) + " to " + currentInitialDate.minusDays(1));
 			optimzedStrategies = mergeStrategies(optimzedStrategies, newStrategies);
 
 			system.setTradingStrategies(optimzedStrategies);
@@ -97,7 +101,13 @@ public class StockAnalysis {
 			currentFinalDate = currentFinalDate.plusMonths(1);
 		}
 		system.closeAllOpenTrades(finalDate);
-		System.out.println(system.getAccountBalance());
+		System.out.println("Final balance: " + system.getAccountBalance());
+
+		log.info("Generating reports ...");
+		new BalanceReport(system, "localhost", 5000, "balance").generate();
+		new StockReport(system, "localhost", 5000, "stock").generate();
+		new TradeReport(system, "localhost", 5000, "trade").generate();
+		log.info("Reports generated");
 
 	}
 

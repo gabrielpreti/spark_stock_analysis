@@ -1,23 +1,51 @@
-curl -XPUT 'http://localhost:9200/spark' -d '{
+curl -XPUT 'http://localhost:9200/balance' -d '{
 		"mappings":
 			{"docs": {
 				"properties":{
-					"alarm":{"type":"boolean"},
-					"bucket":{"type":"string", "index" : "not_analyzed"},
-					"currentMean":{"type":"double"},
-					"currentSd":{"type":"double"},
-					"endpointResponseCode":{"type":"string", "index" : "not_analyzed"},
-					"historicalMean":{"type":"double"},
-					"historicalSd":{"type":"double"},
-					"value":{"type":"double"},
-					"score":{"type":"double"},
-					"timestamp":{"type":"date","format":"dateOptionalTime"},
-					"unixTimestamp":{"type":"long"}
-
+					"balance":{"type":"double"},
+					"timestamp":{"type":"date","format":"dateOptionalTime"}
 				}
 				}
 		}
 }'
 
-curl -XGET localhost:9200/spark/_mapping/
+curl -XGET localhost:9200/balance/_mapping/
+curl -XDELETE localhost:9200/balance
+
+
+curl -XPUT 'http://localhost:9200/stock' -d '{
+		"mappings":
+			{"docs": {
+				"properties":{
+					"timestamp":{"type":"date","format":"dateOptionalTime"},
+					"code":{"type":"string"},
+					"name":{"type":"string", "index" : "not_analyzed"},
+					"open":{"type":"double"},
+					"high":{"type":"double"},
+					"low":{"type":"double"},
+					"close":{"type":"double"},
+					"volume":{"type":"double"}
+				}
+				}
+		}
+}'
+curl -XGET localhost:9200/stock/_mapping/
+curl -XDELETE localhost:9200/stock
+
+curl -XPUT 'http://localhost:9200/trade' -d '{
+		"mappings":
+			{"docs": {
+				"properties":{
+					"timestamp":{"type":"date","format":"dateOptionalTime"},
+					"stockCode":{"type":"string"},
+					"buyDate":{"type":"date"},
+					"sellDate":{"type":"date"},
+					"size":{"type":"double"},
+					"stopPos":{"type":"double"}
+				}
+				}
+		}
+}'
+curl -XGET localhost:9200/trade/_mapping/
+curl -XDELETE localhost:9200/trade
 
