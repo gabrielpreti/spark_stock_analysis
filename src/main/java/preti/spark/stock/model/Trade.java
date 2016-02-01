@@ -10,7 +10,7 @@ public class Trade implements Serializable {
 	private double stopPos;
 	private Date buyDate;
 	private Date sellDate;
-	
+
 	public Trade(Stock stock, double size, double stopPos, Date buyDate) {
 		this(stock, size, stopPos, buyDate, null);
 	}
@@ -72,6 +72,10 @@ public class Trade implements Serializable {
 		return getProfit(d) > 0;
 	}
 
+	public boolean isProfitable() {
+		return getProfit(sellDate) > 0;
+	}
+
 	public double getBuyValue() {
 		return stock.getCloseValueAtDate(buyDate);
 	}
@@ -90,14 +94,17 @@ public class Trade implements Serializable {
 
 		return stock.getCloseValueAtDate(d) <= stopPos;
 	}
-	
+
 	public String toString() {
-		if(isOpen()){
-			return String.format("stock=%s size=%s buyValue=%s stopPos=%s buy=Date%s", stock.getCode(), size, getBuyValue(), stopPos, buyDate);
-		}else{
-			return String.format("stock=%s size=%s buyValue=%s stopPos=%s buy=Date%s sellDate=%s sellValue=%s", stock.getCode(), size, getBuyValue(), stopPos, buyDate, sellDate, stock.getCloseValueAtDate(sellDate));
+		if (isOpen()) {
+			return String.format("stock=%s size=%s buyValue=%s stopPos=%s buy=Date%s", stock.getCode(), size,
+					getBuyValue(), stopPos, buyDate);
+		} else {
+			return String.format("stock=%s size=%s buyValue=%s stopPos=%s buy=Date%s sellDate=%s sellValue=%s",
+					stock.getCode(), size, getBuyValue(), stopPos, buyDate, sellDate,
+					stock.getCloseValueAtDate(sellDate));
 		}
-		
+
 	}
 
 }

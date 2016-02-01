@@ -19,11 +19,11 @@ public class StockTrade implements Serializable {
 	public Stock getStock() {
 		return stock;
 	}
-	
+
 	public List<Trade> getTrades() {
 		return trades;
 	}
-	
+
 	public Trade getLastTrade() {
 		if (trades.size() == 0)
 			return null;
@@ -67,6 +67,28 @@ public class StockTrade implements Serializable {
 
 	public boolean hasAnyTrade() {
 		return trades.size() > 0;
+	}
+
+	public Trade getTradeOpenAt(Date d) {
+		Trade tradeOpen = null;
+		for (Trade t : trades) {
+			if (t.getBuyDate().equals(d)) {
+				tradeOpen = t;
+				break;
+			}
+		}
+		return tradeOpen;
+	}
+
+	public Trade getTradeClosedAt(Date d) {
+		Trade tradeClosed = null;
+		for (Trade t : trades) {
+			if (t.getSellDate().equals(d)) {
+				tradeClosed = t;
+				break;
+			}
+		}
+		return tradeClosed;
 	}
 
 }

@@ -39,7 +39,10 @@ public class BalanceReport extends AbstractReport {
 			this.balance = balance;
 			this.indexName = indexName;
 		}
-
+		
+		public long getUnixTimestamp() {
+			return date.getTime() / 1000l;
+		}
 	}
 
 	public BalanceReport(TradeSystem system, String outputIp, int outputPort, String indexName) {

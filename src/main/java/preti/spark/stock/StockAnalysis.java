@@ -21,7 +21,9 @@ import org.joda.time.DateTime;
 
 import preti.spark.stock.model.Stock;
 import preti.spark.stock.model.StockHistory;
+import preti.spark.stock.reporting.AggregatedReport;
 import preti.spark.stock.reporting.BalanceReport;
+import preti.spark.stock.reporting.OperationsReport;
 import preti.spark.stock.reporting.StockReport;
 import preti.spark.stock.reporting.TradeReport;
 import preti.spark.stock.system.TradeSystem;
@@ -104,9 +106,11 @@ public class StockAnalysis {
 		System.out.println("Final balance: " + system.getAccountBalance());
 
 		log.info("Generating reports ...");
-		new BalanceReport(system, "localhost", 5000, "balance").generate();
-		new StockReport(system, "localhost", 5000, "stock").generate();
-		new TradeReport(system, "localhost", 5000, "trade").generate();
+		 new BalanceReport(system, "localhost", 5003, "balance").generate();
+		new StockReport(system, "localhost", 5001, "stock").generate();
+		new OperationsReport(system, "localhost", 5002, "operations").generate();
+//		 new TradeReport(system, "localhost", 5000, "trade").generate();
+		new AggregatedReport(system, "localhost", 5000, "aggregated").generate();
 		log.info("Reports generated");
 
 	}

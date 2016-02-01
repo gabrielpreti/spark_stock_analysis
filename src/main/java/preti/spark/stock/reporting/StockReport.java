@@ -21,11 +21,13 @@ public class StockReport extends AbstractReport {
 	public class StockHistoryEvent implements Serializable {
 
 		private String indexName;
+		private String code;
 		private Date date;
 		private double high, low, close, volume;
 
-		public StockHistoryEvent(Date date, double high, double low, double close, double volume, String indexName) {
+		public StockHistoryEvent(String code, Date date, double high, double low, double close, double volume, String indexName) {
 			super();
+			this.code = code;
 			this.date = date;
 			this.high = high;
 			this.low = low;
@@ -36,6 +38,10 @@ public class StockReport extends AbstractReport {
 
 		public String getIndexName() {
 			return indexName;
+		}
+		
+		public String getCode() {
+			return code;
 		}
 
 		public String getDate() {
@@ -58,6 +64,10 @@ public class StockReport extends AbstractReport {
 			return volume;
 		}
 
+		public long getUnixTimestamp() {
+			return date.getTime() / 1000l;
+		}
+
 	}
 
 	public StockReport(TradeSystem system, String outputIp, int outputPort, String indexName) {
@@ -76,7 +86,7 @@ public class StockReport extends AbstractReport {
 		for (Stock s : stocks) {
 			for (Date d : s.getAllHistoryDates()) {
 				StockHistory history = s.getHistory(d);
-				writer.println(mapper.writeValueAsString(new StockHistoryEvent(d, history.getHigh(), history.getLow(),
+				writer.println(mapper.writeValueAsString(new StockHistoryEvent(s.getCode(), d, history.getHigh(), history.getLow(),
 						history.getClose(), history.getVolume(), this.indexName)));
 			}
 		}

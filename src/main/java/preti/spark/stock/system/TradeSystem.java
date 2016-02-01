@@ -177,6 +177,7 @@ public class TradeSystem implements Serializable {
 				this.closeLastTrade(st, d);
 			}
 		}
+		balanceHistory.put(d, this.accountBalance);
 	}
 
 }

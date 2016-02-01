@@ -49,3 +49,25 @@ curl -XPUT 'http://localhost:9200/trade' -d '{
 curl -XGET localhost:9200/trade/_mapping/
 curl -XDELETE localhost:9200/trade
 
+
+
+curl -XPUT 'http://localhost:9200/aggregated' -d '{
+		"mappings":
+			{"docs": {
+				"properties":{
+					"timestamp":{"type":"date","format":"dateOptionalTime"},
+					"code":{"type":"string", "index" : "not_analyzed"},
+					"name":{"type":"string", "index" : "not_analyzed"},
+					"closeValue":{"type":"double"},
+					"buyValue":{"type":"double"},
+					"sellValue":{"type":"double"},
+					"size":{"type":"double"},
+					"stopPos":{"type":"double"},
+					"profit":{"type":"double"},
+					"proffitable":{"type":"boolean"}
+				}
+				}
+		}
+}'
+curl -XGET localhost:9200/aggregated/_mapping/
+curl -XDELETE localhost:9200/aggregated
